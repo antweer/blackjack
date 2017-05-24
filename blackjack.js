@@ -53,10 +53,10 @@ $(function domReady() {
     { point: 13, suit: 'diamonds' },
     { point: 13, suit: 'clubs' },
   ];
-  var cards2 = cards1;
+  var cards2 = cards1.slice();
   var deck = [];
-  var dealerHand;
-  var playerHand;
+  var dealerHand = [];
+  var playerHand = [];
   var hitCount = 2;
   var standCount = 2;
   function random(min, max) {
@@ -112,22 +112,26 @@ $(function domReady() {
     }
   }
   function restart(){
-    cards2 = cards1;
+    cards2 = cards1.slice();
+    deck = [];
+    shuffle(cards2);
     hitCount = 2;
     standCount = 2;
-    deck = [];
     dealerHand = [];
     playerHand = [];
-    $('#dealer-hand').text('');
-    $('#player-hand').text('');
+    $('#dealer-hand').html('');
+    $('#player-hand').html('');
+    $('#dealer-points').text('');
+    $('#player-points').text('');
+    $('#messages').text('');
     $('#restart-button').hide();
     $('#deal-button').show();
     $('#hit-button').show();
     $('#stand-button').show();
   }
   $('#restart-button').hide();
+  shuffle(cards2);
   $('#deal-button').click(function(){
-    shuffle(cards2);
     dealerHand = [deck.pop(), deck.pop()];
     playerHand = [deck.pop(), deck.pop()];
     $('#dealer-hand').append('<img src="' + getImage(dealerHand[0][0]) + '"/><img src="' + getImage(dealerHand[1][0]) + '"/>');
@@ -141,7 +145,7 @@ $(function domReady() {
     $('#player-hand').append('<img src="' + getImage(playerHand[hitCount][0]) + '"/>');
     $('#player-points').text(calculatePoints(playerHand));
     if(calculatePoints(playerHand)>21){
-      $('#messages').text("You've busted! Dealer wins.")
+      $('#messages').text("You've busted! Dealer wins.");
       $('#hit-button').hide();
       $('#stand-button').hide();
       $('#restart-button').show();
